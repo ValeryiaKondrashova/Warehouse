@@ -107,6 +107,7 @@ public class MainController {
             System.exit(-1);
         }
 
+        System.out.println("Hello everyone!");
         column_id.setCellValueFactory(cellValue -> cellValue.getValue().idProperty().asObject());
         column_name.setCellValueFactory(cellValue -> cellValue.getValue().nameProperty());
         column_login.setCellValueFactory(cellValue -> cellValue.getValue().loginProperty());
