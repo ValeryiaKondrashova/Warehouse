@@ -128,7 +128,7 @@ public class Controller {
             try
             {
                 DatabaseHandler dbHandler = new DatabaseHandler();
-                ProgramLogger.getProgramLogger().addLogInfo("Запрос в БД для получения логина и СТАТУСА клиента...");
+                ProgramLogger.getProgramLogger().addLogInfo("Запрос в БД для получения логина, пароля и СТАТУСА клиента...");
 
                 Connection connection = dbHandler.getDbConnection();
                 Statement statement = connection.createStatement();

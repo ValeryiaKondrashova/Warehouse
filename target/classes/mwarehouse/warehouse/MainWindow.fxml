@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="627.0" prefWidth="800.0" style="-fx-background-color: #2E3348;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mwarehouse.warehouse.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="627.0" prefWidth="800.0" style="-fx-background-color: #2E3348;" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mwarehouse.warehouse.MainController">
    <children>
+      <Button fx:id="button_otchet" layoutX="4.0" layoutY="4.0" mnemonicParsing="false" onAction="#ShowDialogForSaving" style="-fx-background-color: #2E3348;">
+         <graphic>
+            <ImageView fitHeight="32.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../image/save.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
       <Button fx:id="button_view" layoutX="1.0" layoutY="40.0" mnemonicParsing="false" style="-fx-background-color: #2E3348;" text="Просмотр" textFill="#fafafa">
          <font>
             <Font name="Corbel" size="24.0" />
@@ -58,17 +63,17 @@
 <!--                  <Font name="Corbel" size="14.0" />-->
 <!--               </font>-->
 <!--            </TextField>-->
-            <TextField fx:id="field_name" layoutX="135.0" layoutY="17.0" prefHeight="30.0" prefWidth="155.0" promptText="Имя" style="-fx-border-color: #2E3348; -fx-border-radius: 5px; -fx-background-color: #d1d1d1; -fx-font-style: red;">
+            <TextField fx:id="field_name" layoutX="136.0" layoutY="17.0" prefHeight="30.0" prefWidth="155.0" promptText="Имя" style="-fx-border-color: #2E3348; -fx-border-radius: 5px; -fx-background-color: #d1d1d1; -fx-font-style: red;">
                <font>
                   <Font name="Corbel" size="14.0" />
                </font>
             </TextField>
-            <TextField fx:id="field_login" layoutX="297.0" layoutY="17.0" prefHeight="30.0" prefWidth="168.0" promptText="Логин" style="-fx-border-color: #2E3348; -fx-border-radius: 5px; -fx-background-color: #d1d1d1; -fx-font-color: #FFFFFF;">
+            <TextField fx:id="field_login" layoutX="296.0" layoutY="17.0" prefHeight="30.0" prefWidth="168.0" promptText="Логин" style="-fx-border-color: #2E3348; -fx-border-radius: 5px; -fx-background-color: #d1d1d1; -fx-font-color: #FFFFFF;">
                <font>
                   <Font name="Corbel" size="14.0" />
                </font>
             </TextField>
-            <TextField fx:id="field_password" layoutX="471.0" layoutY="17.0" prefHeight="30.0" prefWidth="168.0" promptText="Пароль" style="-fx-border-color: #2E3348; -fx-border-radius: 5px; -fx-background-color: #d1d1d1; -fx-font-color: #FFFFFF;">
+            <TextField fx:id="field_password" layoutX="469.0" layoutY="17.0" prefHeight="30.0" prefWidth="168.0" promptText="Пароль" style="-fx-border-color: #2E3348; -fx-border-radius: 5px; -fx-background-color: #d1d1d1; -fx-font-color: #FFFFFF;">
                <font>
                   <Font name="Corbel" size="14.0" />
                </font>
@@ -83,10 +88,15 @@
                   <Image url="@../../image/something.png" />
                </image>
             </ImageView>
-            <TextField fx:id="field_unCorrect" layoutX="138.0" layoutY="66.0" prefHeight="26.0" prefWidth="289.0" style="-fx-background-color: #ff9932;">
+            <TextField fx:id="field_unCorrect" layoutX="138.0" layoutY="66.0" prefHeight="28.0" prefWidth="495.0" style="-fx-background-color: #ff9932;">
                <font>
                   <Font name="Corbel" size="15.0" />
                </font></TextField>
          </children></AnchorPane>
+      <TextField fx:id="filterField" layoutX="593.0" layoutY="50.0" prefHeight="28.0" prefWidth="199.0" promptText="Поиск" style="-fx-background-color: #fafafa;">
+         <font>
+            <Font name="Corbel Italic" size="15.0" />
+         </font>
+      </TextField>
    </children>
 </AnchorPane>

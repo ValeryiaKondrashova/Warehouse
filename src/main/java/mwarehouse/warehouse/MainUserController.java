@@ -95,6 +95,22 @@ public class MainUserController {
     @FXML
     private TextField filterField;
 
+    public void ShowDialogForSaving(ActionEvent event) {
+        try {
+            Stage stage = new Stage();
+            Parent root = FXMLLoader.load(getClass().getResource("SavingFileUser.fxml"));
+            stage.setTitle("Создание текстового отчета");
+            stage.setResizable(false);
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner( ((Node)event.getSource()).getScene().getWindow() );
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     public void ShowDialog(ActionEvent event) {
         try {
@@ -213,20 +229,22 @@ public class MainUserController {
 
         FilteredList<ProductProperty> filterData = new FilteredList<>(tableProductProperties,b->true);
         filterField.textProperty().addListener((observable,oldValue,newValue) -> {
-            filterData.setPredicate(employee -> {
+            filterData.setPredicate(product -> {
                 if (newValue == null || newValue.isEmpty()){
                     return true;
                 }
                 String lowerCaseFilter = newValue.toLowerCase();
 
-                if(employee.getManufacturer().toLowerCase().indexOf(lowerCaseFilter) != -1){
-                    System.out.println("Qwerty");
+                if(product.getManufacturer().toLowerCase().indexOf(lowerCaseFilter) != -1 ||
+                        product.getType().toLowerCase().indexOf(lowerCaseFilter) != -1 ||
+                        product.getModel().toLowerCase().indexOf(lowerCaseFilter) != -1 ||
+                        String.valueOf(product.getQuantity()).indexOf(lowerCaseFilter) != -1 ||
+                        String.valueOf(product.getPrice()).indexOf(lowerCaseFilter) != -1 ||
+                        product.getStorage().toLowerCase().indexOf(lowerCaseFilter) != -1 ||
+                        product.getWarehouse().toLowerCase().indexOf(lowerCaseFilter) != -1) {
                     return true;
-                }else{
-                    System.out.println("Qwerty2");
-                    return false;
-
                 }
+                else { return false; }
             });
             SortedList<ProductProperty> sortedDate = new SortedList<>(filterData);
             sortedDate.comparatorProperty().bind(table_products.comparatorProperty());
@@ -235,10 +253,9 @@ public class MainUserController {
             table_products.setItems(sortedDate);
         });
 
-
-
         ObservableList<String> list = FXCollections.observableArrayList("JavaFX", "SceneBuilder","Laravel","Python");
         comb.setItems(list);
+
     }
 
 

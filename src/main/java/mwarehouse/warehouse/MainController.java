@@ -1,24 +1,40 @@
 package mwarehouse.warehouse;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.Socket;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import mwarehouse.warehouse.common.ConnectionTCP;
 import mwarehouse.warehouse.entity.Command;
+import mwarehouse.warehouse.entity.ProductProperty;
 import mwarehouse.warehouse.entity.User;
 import mwarehouse.warehouse.entity.UserProperty;
+import mwarehouse.warehouse.server.repository.DatabaseHandler;
 import mwarehouse.warehouse.singleton.ProgramLogger;
 
 public class MainController {
@@ -47,7 +63,7 @@ public class MainController {
     private ImageView button_grafics;
 
     @FXML
-    private ImageView button_otchet;
+    private Button button_otchet;
 
     @FXML
     private Button button_exit;
@@ -93,6 +109,29 @@ public class MainController {
 
     @FXML
     private TextField field_unCorrect;
+
+    @FXML
+    private TextField filterField;
+
+    public void ShowDialogForSaving(ActionEvent event) {
+        try {
+            Stage stage = new Stage();
+            Parent root = FXMLLoader.load(getClass().getResource("SavingFile.fxml"));
+            stage.setTitle("Создание текстового отчета");
+            stage.setResizable(false);
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner( ((Node)event.getSource()).getScene().getWindow() );
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+//    String fileNameForSaving;
+//    public void displayNameFile(String fileName){
+//        fileNameForSaving = fileName;
+//    }
 
 
 
@@ -237,6 +276,66 @@ public class MainController {
             connectionTCP.writeObject(Command.EXIT);
             connectionTCP.close();
             System.exit(0);
+        });
+//        button_otchet.setOnAction(event -> {
+//
+//            DatabaseHandler dbHandler = new DatabaseHandler();
+//
+//            Connection connection = null;
+//            Statement statement = null;
+//            ResultSet rs = null;
+//            try {
+//                connection = dbHandler.getDbConnection();
+//                statement = connection.createStatement();
+//                rs = statement.executeQuery("select users.name,users.login, users.password, statusUser from users");
+//            } catch (ClassNotFoundException | SQLException e) {
+//                e.printStackTrace();
+//            }
+//            try {
+//                FileWriter fileWriter = new FileWriter(fileNameForSaving, true);
+//                while (rs.next()) {
+//
+//                    String name = rs.getString("name");
+//                    String login = rs.getString("login");
+//                    String password = rs.getString("password");
+//                    String statusUser = rs.getString("statusUser");
+//
+//                    fileWriter.write("Имя пользователя : " + name + "\n" +
+//                            "\tЛогин : " + login + "\n" +
+//                            "\tПароль : " + password + "\n" +
+//                            "\tСтатус = " + statusUser + ".\n\n");
+//
+//
+//                }
+//                fileWriter.close();
+//            } catch (IOException | SQLException e) {
+//                e.printStackTrace();
+//            }
+//            field_unCorrect.setText("Текстовый отчет готов! Данные сохранены в файл.");
+//        });
+
+
+        FilteredList<UserProperty> filterData = new FilteredList<>(tableCountryProperties, b->true);
+        filterField.textProperty().addListener((observable,oldValue,newValue) -> {
+            filterData.setPredicate(user -> {
+                if (newValue == null || newValue.isEmpty()){
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if(user.getName().toLowerCase().indexOf(lowerCaseFilter) != -1 || user.getLogin().toLowerCase().indexOf(lowerCaseFilter) != -1 || user.getPassword().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                    System.out.println("Qwerty");
+                    return true; //фильтр для логина
+                }
+                else{
+                    return false;
+                }
+            });
+            SortedList<UserProperty> sortedDate = new SortedList<>(filterData);
+            sortedDate.comparatorProperty().bind(table_user.comparatorProperty());
+
+            System.out.println("sortedDate = " + sortedDate);
+            table_user.setItems(sortedDate);
         });
     }
 

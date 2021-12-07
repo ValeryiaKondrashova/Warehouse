@@ -38,14 +38,14 @@ public class RequestHandler implements Runnable {
                 }
                 break;
                 case READ: {
-                    List<User> techniques = null;
+                    List<User> userr = null;
                     try {
-                        techniques = userRepository.getAllUsers();
+                        userr = userRepository.getAllUsers();
                         ProgramLogger.getProgramLogger().addLogInfo("Успешно! Данные из БД о пользователях просмотрены!");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    connectionTCP.writeObject(techniques); // с помощью writeObject отправляем клиенту массив юзеров
+                    connectionTCP.writeObject(userr); // с помощью writeObject отправляем клиенту массив юзеров
                 }
                 break;
                 case READ1: {
