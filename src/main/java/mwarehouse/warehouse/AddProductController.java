@@ -44,16 +44,8 @@ public class AddProductController {
     private TextField storage_add;
 
     @FXML
-    private  TextField warehouse_add;
+    private TextField qw_field;
 
-//    @FXML
-//    private TextField qw_field;
-
-
-
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
 
     @FXML
     void Add(ActionEvent event) throws IOException {
@@ -64,25 +56,30 @@ public class AddProductController {
         String quantity = quantity_add.getText();
         String price = price_add.getText();
         String storage = storage_add.getText();
-        String warehouse = warehouse_add.getText();
 
-        System.out.println(manufacturer + " " + type + " " + model + " " + quantity + " " + price + " " + storage + " " + warehouse);
+        if (manufacturer.isEmpty() || type.isEmpty() || model.isEmpty() || quantity.isEmpty() || price.isEmpty() || storage.isEmpty()){
+            qw_field.setText("Присутствуют пустые поля!");
+            qw_field.setStyle("-fx-background-color: #2E3348; -fx-text-fill: #fafafa;");
+        }
+        else {
+            System.out.println(manufacturer + " " + type + " " + model + " " + quantity + " " + price + " " + storage);
 
-        MainUserController mainUserController = new MainUserController();
-        mainUserController.displayName(manufacturer,
-                type,
-                model,
-                quantity,
-                price,
-                storage,
-                warehouse);
+            MainUserController mainUserController = new MainUserController();
+            mainUserController.displayName(manufacturer,
+                    type,
+                    model,
+                    quantity,
+                    price,
+                    storage);
+            qw_field.setText("Товар успешно добавлен!");
+            qw_field.setStyle("-fx-background-color: #2E3348; -fx-text-fill: #fafafa;");
+        }
+
     }
 
     @FXML
     void initialize() {
-//        add_add.setOnAction(event -> {
-//            qw_field.setText("Товар успешно добавлен!");
-//        });
+
     }
 
 }

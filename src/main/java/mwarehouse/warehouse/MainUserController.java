@@ -3,9 +3,7 @@ package mwarehouse.warehouse;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -22,7 +20,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import mwarehouse.warehouse.common.ConnectionTCP;
 import mwarehouse.warehouse.entity.*;
 import mwarehouse.warehouse.singleton.ProgramLogger;
@@ -30,6 +27,34 @@ import mwarehouse.warehouse.singleton.ProgramLogger;
 public class MainUserController {
     private ConnectionTCP connectionTCP;
     private final ObservableList<ProductProperty> tableProductProperties = FXCollections.observableArrayList();// вызовет конструктор 0
+
+//    public ConnectionTCP Conn(){
+//
+//        ConnectionTCP connectionTCP = null;
+//        try {
+//            connectionTCP = new ConnectionTCP(new Socket("localhost", 6666));  // Создание сокета для передачи данных. Сокета для установки соединения уже создан раннее (в RequestHandler.java)
+//            System.out.println("-----Нашел клиента и сокет готов для передачи! :) ");
+//        } catch (IOException e) {
+//            System.out.println("Не нашел клиента! :(");
+//            e.printStackTrace();
+//            System.exit(-1);
+//        }
+//        return connectionTCP;
+//    }
+    @FXML
+    private TextField field_type;
+    @FXML
+    private TextField field_manufacturer;
+    @FXML
+    private TextField field_model;
+    @FXML
+    private TextField field_quantity;
+    @FXML
+    private TextField field_price;
+    @FXML
+    private TextField field_storage;
+
+
 
 
     @FXML
@@ -128,26 +153,44 @@ public class MainUserController {
         }
     }
 
-    String manufacturer_product;
-    String type_product;
-    String model_product;
-    String quantity_product;
-    String price_product;
-    String storage_product;
-    String warehouse_product;
+    public void displayName(String manufacturer, String type, String model, String quantity, String price, String storage){
+        //получение данных о товаре с модального окна (Добавление товара) для дальнейшего добавления в таблицу
+        String manufacturer_product  = manufacturer;
+        String type_product  = type;
+        String model_product  = model;
+        Integer quantity_product = Integer.parseInt(quantity);
+        Double price_product = Double.parseDouble(price);
+        String storage_product  = storage;
 
-    public void displayName(String manufacturer, String type, String model, String quantity, String price, String storage, String warehouse){
-        manufacturer_product = manufacturer;
-        type_product = type;
-        model_product = model;
-        quantity_product = quantity;
-        price_product = price;
-        storage_product = storage;
-        warehouse_product = warehouse;
+        System.out.println(manufacturer_product + " " + type_product + " " + model_product + " " + quantity_product + " " + price_product + " " + storage_product);
 
+        // добавление товара в БД
+        try {
+            connectionTCP = new ConnectionTCP(new Socket("localhost", 6666));  // Создание сокета для передачи данных. Сокета для установки соединения уже создан раннее (в RequestHandler.java)
+            // System.out.println("Нашел клиента и сокет готов для передачи! :)1");
+        } catch (IOException e) {
+            // System.out.println("Не нашел клиента! :(");
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        try {
+            Product product = new Product(manufacturer_product,
+                    type_product,
+                    model_product,
+                    quantity_product,
+                    price_product,
+                    storage_product);
+            System.out.println("product = " + product);
+            System.out.println("product manufacturer_product  = " + product.getManufacturer());
 
-        System.out.println(manufacturer_product + " " + type_product + " " + model_product + " " + quantity_product + " " + price_product + " " + storage_product + " " + warehouse_product);
+            connectionTCP.writeObject(Command.CREATE1);
+            connectionTCP.writeObject(product);
 
+            connectionTCP.writeObject(Command.EXIT);
+            connectionTCP.close();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -158,9 +201,18 @@ public class MainUserController {
 
     @FXML
     void initialize() {
+//        ConnectionTCP connectionTCP2 = Conn();
+//        System.out.println("connectionTCP2 = " + connectionTCP2);
+        field_type.setDisable(true);
+        field_manufacturer.setDisable(true);
+        field_model.setDisable(true);
+        field_quantity.setDisable(true);
+        field_price.setDisable(true);
+        field_storage.setDisable(true);
+
         try {
             connectionTCP = new ConnectionTCP(new Socket("localhost", 6666));  // Создание сокета для передачи данных. Сокета для установки соединения уже создан раннее (в RequestHandler.java)
-            System.out.println("Нашел клиента и сокет готов для передачи! :)");
+            System.out.println("Нашел клиента и сокет готов для передачи! :)0");
         } catch (IOException e) {
             System.out.println("Не нашел клиента! :(");
             e.printStackTrace();
@@ -200,13 +252,15 @@ public class MainUserController {
             table_products.setItems(tableProductProperties);// устанавливаем значение обсёрвабл листа в таблицу
         });
 
-//        button_add_byUser.setOnAction(event -> {
-//            System.out.println("Клиент нажал на  ДОБАВИТЬ (MainUserController)");
-//
-//
-//
-//        });
-
+        button_edit_byUser.setOnAction(event -> {
+            field_type.setDisable(false);
+            field_manufacturer.setDisable(false);
+            field_model.setDisable(false);
+            field_quantity.setDisable(false);
+            field_price.setDisable(false);
+            field_storage.setDisable(false);
+            button_exit_byUser.setText("Редактировать");
+        });
 
         button_delete_byUser.setOnAction(event -> {
             System.out.println("Клиент нажал на  УДАЛИТЬ (MainUserController)");
@@ -219,11 +273,77 @@ public class MainUserController {
                 field_unCorrect_byUser.setText("Выберите строку!");
             }
         });
+//        button_exit_byUser.setOnAction(event -> {
+//            System.out.println("Клиент нажал на  ВЫХОД (MainUserController)");
+//                connectionTCP.writeObject(Command.EXIT);
+//                connectionTCP.close();
+//                System.exit(0);
+//                });
         button_exit_byUser.setOnAction(event -> {
-            System.out.println("Клиент нажал на  ВЫХОД (MainUserController)");
-            connectionTCP.writeObject(Command.EXIT);
-            connectionTCP.close();
-            System.exit(0);
+            if(button_exit_byUser.getText().equals("Выход")){
+                System.out.println("Клиент нажал на  ВЫХОД (MainUserController)");
+                connectionTCP.writeObject(Command.EXIT);
+                connectionTCP.close();
+                System.exit(0);
+            }
+            else{
+                try {
+                    field_unCorrect_byUser.setText("");
+                    Product product = table_products.getSelectionModel().getSelectedItem().toWWarehouse();
+
+                    String type = field_type.getText();
+                    if (!type.isEmpty()) {
+                        product.setType(type);
+                    }
+                    String manufacturer = field_manufacturer.getText();
+                    if (!manufacturer.isEmpty()) {
+                        product.setManufacturer(manufacturer);
+                    }
+                    String model = field_model.getText();
+                    if (!model.isEmpty()) {
+                        product.setModel(model);
+                    }
+                    String quantity = field_quantity.getText();
+                    if (!quantity.isEmpty()) {
+                        product.setQuantity(Integer.parseInt(quantity));
+                    }
+                    String price = field_price.getText();
+                    if (!price.isEmpty()) {
+                        product.setPrice(Double.parseDouble(price));
+                    }
+                    String storage = field_storage.getText();
+                    if (!storage.isEmpty()) {
+                        product.setStorage(storage);
+                    }
+
+                    field_type.setText("");
+                    field_manufacturer.setText("");
+                    field_model.setText("");
+                    field_quantity.setText("");
+                    field_price.setText("");
+                    field_storage.setText("");
+                    field_unCorrect_byUser.setText("");
+
+                    connectionTCP.writeObject(Command.UPDATE1);
+                    connectionTCP.writeObject(product);
+
+                    field_type.setDisable(true);
+                    field_manufacturer.setDisable(true);
+                    field_model.setDisable(true);
+                    field_quantity.setDisable(true);
+                    field_price.setDisable(true);
+                    field_storage.setDisable(true);
+
+                    button_exit_byUser.setText("Выход");
+
+                } catch (NullPointerException e) {
+                    field_unCorrect_byUser.setText("Выберите строку!");
+                } catch (RuntimeException e) {
+                    field_unCorrect_byUser.setText("Некорректный ввод данных. Повторите попытку!");
+                }
+            }
+
+
         });
 
 

@@ -4,10 +4,12 @@ import java.io.Serializable;
 
 public enum Command implements Serializable {
     CREATE,
+    CREATE1,
     READ,
-    UPDATE,
-    DELETE,
-    EXIT,
     READ1,
+    UPDATE,
+    UPDATE1,
+    DELETE,
     DELETE1,
+    EXIT,
 }

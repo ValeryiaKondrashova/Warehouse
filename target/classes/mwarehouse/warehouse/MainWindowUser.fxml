@@ -46,6 +46,17 @@
                         <Font name="Corbel" size="15.0" />
                      </font>
                   </TextField>
+                  <TextField fx:id="field_type" layoutX="121.0" layoutY="14.0" prefHeight="26.0" prefWidth="78.0" />
+                  <TextField fx:id="field_manufacturer" layoutX="209.0" layoutY="14.0" prefHeight="26.0" prefWidth="103.0" />
+                  <TextField fx:id="field_model" layoutX="321.0" layoutY="14.0" prefHeight="26.0" prefWidth="127.0" />
+                  <TextField fx:id="field_quantity" layoutX="455.0" layoutY="14.0" prefHeight="26.0" prefWidth="78.0" />
+                  <TextField fx:id="field_price" layoutX="543.0" layoutY="14.0" prefHeight="26.0" prefWidth="78.0" />
+                  <TextField fx:id="field_storage" layoutX="687.0" layoutY="13.0" prefHeight="26.0" prefWidth="103.0" />
+                  <Line endX="51.0" endY="0.20001220703125" layoutX="636.0" layoutY="26.0" startX="-15.0" startY="0.20001220703125" />
+                  <Line endX="-9.400054931640625" endY="1.20001220703125" layoutX="218.0" layoutY="26.0" startX="-18.600006103515625" startY="1.20001220703125" />
+                  <Line endX="-91.0" layoutX="412.0" layoutY="27.0" startX="-100.0" />
+                  <Line endX="-48.000030517578125" endY="1.20001220703125" layoutX="503.0" layoutY="26.0" startX="-54.800018310546875" startY="1.20001220703125" />
+                  <Line endX="9.4000244140625" layoutX="534.0" layoutY="27.0" startX="-0.20001220703125" />
                </children>
             </AnchorPane>
          </children>

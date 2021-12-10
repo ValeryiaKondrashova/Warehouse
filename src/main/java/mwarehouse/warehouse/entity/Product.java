@@ -38,6 +38,17 @@ public class Product implements Serializable {
 
     }
 
+    // конструктор для добавления товара
+    public Product(String manufacturer, String type, String model, Integer quantity, Double price, String storage) {
+        this.manufacturer = manufacturer;
+        this.type = type;
+        this.model = model;
+        this.quantity = quantity;
+        this.price = price;
+        this.storage = storage;
+    }
+
+
     public void setId(int id) { this.id = id; }
 
     public void setManufacturer(String manufacturer) { this.manufacturer = manufacturer; }

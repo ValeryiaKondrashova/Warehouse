@@ -37,6 +37,16 @@ public class RequestHandler implements Runnable {
                     }
                 }
                 break;
+                case CREATE1: {
+                    Product product = (Product) connectionTCP.readObject();
+                    try {
+                        userRepository.signUpProduct(product);
+                        ProgramLogger.getProgramLogger().addLogInfo("Успешно! Товар добавлен в БД (Table: products)!");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
                 case READ: {
                     List<User> userr = null;
                     try {
@@ -70,6 +80,17 @@ public class RequestHandler implements Runnable {
                     }
                 }
                 break;
+                case UPDATE1: {
+                    Product product = (Product) connectionTCP.readObject();
+
+                    try {
+                        productRepository.updateProduct(product);
+                        ProgramLogger.getProgramLogger().addLogInfo("Успешно! Данные пользователя отредактированы!");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
                 case DELETE: {
                     Integer id = (Integer) connectionTCP.readObject();
                     try {
@@ -83,7 +104,7 @@ public class RequestHandler implements Runnable {
                 case DELETE1: {
                     Integer id = (Integer) connectionTCP.readObject();
                     try {
-                        userRepository.deleteProductByID(id);
+                        productRepository.deleteProductByID(id);
                         ProgramLogger.getProgramLogger().addLogInfo("Успешно! Товар удален!");
                     } catch (IOException e) {
                         e.printStackTrace();

@@ -52,6 +52,39 @@ public class DatabaseHandler extends Configs {   //класс DatabaseHandler н
         }
     }
 
+    public void signUpProduct(Product product){
+        // добавляем модель с ценой в табл модель
+        String insert = "INSERT INTO models (model,price) VALUES (?,?)";
+        try {
+            PreparedStatement prSt = getDbConnection().prepareStatement(insert);
+            prSt.setString(1,product.getModel());
+            prSt.setDouble(2,product.getPrice());
+
+            prSt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        //Добавляем сам товар
+        String insert2 = "INSERT INTO products (manufacturer_product, type_product, model_product, quantity_product, storage_product) VALUES ((SELECT idManufacturer FROM manufacturers WHERE manufacturer = ?),(SELECT idType FROM types WHERE type = ?),(SELECT idModel FROM models WHERE model = ?),?,(SELECT idStorage FROM storages WHERE storage = ?))";
+        try {
+            PreparedStatement prSt = getDbConnection().prepareStatement(insert2);
+            prSt.setString(1,product.getManufacturer());
+            prSt.setString(2,product.getType());
+            prSt.setString(3,product.getModel());
+            prSt.setInt(4,product.getQuantity());
+            prSt.setString(5,product.getStorage());
+
+            prSt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     // write, read
     public ResultSet getUser(User user) { //это метод, который возвращает
         ResultSet reSet = null;
@@ -125,6 +158,28 @@ public class DatabaseHandler extends Configs {   //класс DatabaseHandler н
         } catch (SQLException e) {
             e.printStackTrace();
             ProgramLogger.getProgramLogger().addLogInfo("При попытке редактирования пользователя возникла ошибка! Введены некорректные данные.");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateProduct(Product product){
+        try (Connection connection = getDbConnection();
+             //Заменить запрос!!!!!!!
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                     "update products JOIN manufacturers ON products.manufacturer_product = manufacturers.idManufacturer JOIN types ON products.type_product = types.idType JOIN models ON products.model_product = models.idModel JOIN storages ON  products.storage_product = storages.idStorage set manufacturer_product=(Select idManufacturer from manufacturers where manufacturer = ?), type_product=(Select idType from types where type = ?), model_product=(Select idModel from models where model = ?), quantity_product = ?, storage_product=(Select idStorage from storages where storage = ?) where idproduct = ?")) {;
+            preparedStatement.setString(1, product.getManufacturer());
+            preparedStatement.setString(2, product.getType());
+            preparedStatement.setString(3, product.getModel());
+            preparedStatement.setInt(4, product.getQuantity());
+            //preparedStatement.setDouble(5, product.getPrice());
+            preparedStatement.setString(5, product.getStorage());
+            preparedStatement.setInt(6, product.getId());
+
+            preparedStatement.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
